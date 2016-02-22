@@ -10,6 +10,22 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6"
+        android:text="Pick a song"
+        android:id="@+id/pick_song_button">
+    </Button>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:text="Test Alarm"
+        android:id="@+id/test_activity_button">
+    </Button>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
         android:text="Set Alarm"
         android:id="@+id/alarm_activity_button">
     </Button>

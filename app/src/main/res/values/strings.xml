@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BlackFlagSharkAlarm</string>
+    <string name="song_hint">Song</string>
+    <string name="artist_hint">Artist</string>
 </resources>

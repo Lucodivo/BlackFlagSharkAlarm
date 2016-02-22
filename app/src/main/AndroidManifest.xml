@@ -21,6 +21,8 @@
         <receiver android:name=".AlarmReceiver" />
 
         <activity android:name=".Alarm" />
+        <activity android:name=".SearchActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan"></activity>
     </application>
 
 </manifest>
