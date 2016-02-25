@@ -20,7 +20,8 @@
 
         <receiver android:name=".AlarmReceiver" />
 
-        <activity android:name=".Alarm" />
+        <activity android:name=".Alarm"
+            android:configChanges="orientation|screenSize"/>
         <activity android:name=".SearchActivity"
             android:windowSoftInputMode="stateVisible|adjustPan"></activity>
     </application>

@@ -1,12 +1,22 @@
 package com.inasweaterpoorlyknit.blackflagsharkalarm;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
+
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class Alarm extends AppCompatActivity implements
         YouTubePlayer.OnInitializedListener{
@@ -32,12 +42,22 @@ public class Alarm extends AppCompatActivity implements
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
         if(!b){
             this.player = youTubePlayer;
-            this.player.loadVideo("I0M2gIhgvW0");
+            SharedPreferences prefs = getSharedPreferences(Overview.ALARM_PREFS, MODE_PRIVATE);
+            String songID = prefs.getString("AlarmID1", "I0M2gIhgvW0");
+            this.player.loadVideo(songID);
+            Log.d("Alarm.java: ", "YouTube Player successfully initialized");
         }
     }
 
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+        Log.d("Alarm.java: ", "YouTube Player failed to initialize");
+    }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
+
+        this.player.play();
     }
 }
