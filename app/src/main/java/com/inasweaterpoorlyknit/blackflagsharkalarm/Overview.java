@@ -118,6 +118,9 @@ public class Overview extends AppCompatActivity
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
 
+        if(calendar.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()){
+            calendar.add(Calendar.DATE, 1);
+        }
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), /*AlarmManager.INTERVAL_DAY,*/ pendingIntent);
 
         Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
