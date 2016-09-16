@@ -14,9 +14,6 @@ import android.widget.Button;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Calendar;
 
 public class Overview extends AppCompatActivity
@@ -52,6 +49,7 @@ public class Overview extends AppCompatActivity
                 Intent searchIntent = new Intent(v.getContext(), SearchActivity.class);
                 searchIntent.putExtra("song", "name");
                 startActivityForResult(searchIntent, SEARCH_CODE);
+                Toast.makeText(v.getContext(), "pickButton", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -75,7 +73,7 @@ public class Overview extends AppCompatActivity
     }
 
     public void setAlarm(){
-        DialogFragment newFragment = new TimePickerFragment();
+        TimePickerFragment newFragment = new TimePickerFragment();
         newFragment.show(getFragmentManager(), "timePicker");
     }
 

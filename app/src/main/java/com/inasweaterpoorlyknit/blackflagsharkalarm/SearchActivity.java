@@ -2,7 +2,6 @@ package com.inasweaterpoorlyknit.blackflagsharkalarm;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -24,11 +23,8 @@ import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.api.services.youtube.model.SearchResult;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 public class SearchActivity extends AppCompatActivity implements
         YouTubePlayer.OnInitializedListener{
@@ -61,17 +57,16 @@ public class SearchActivity extends AppCompatActivity implements
         // Accessing all of our components
         final Button searchButton = (Button) findViewById(R.id.search_button); // button to get YouTube search results
         final EditText songEditText = (EditText) findViewById(R.id.song_text); // editText for getting song from user
-        final EditText artistEditText = (EditText) findViewById(R.id.artist_text); // editText for getting artist from user
         final ListView searchListView = (ListView) findViewById(R.id.search_list_view); // listView to show search results
         final FloatingActionButton returnButton = (FloatingActionButton) findViewById(R.id.return_button); // upload button to send song to host
 
         // input method manager to control when the keyboard is active
         final InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        playerFragment.initialize(DeveloperKey.ANDROID_KEY, this);
+        playerFragment.initialize(DeveloperKey.DEVELOPER_KEY, this);
 
         // if the user says they are done editing, search for results
-        artistEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        songEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionID, KeyEvent keyEvent) {
                 if(actionID == EditorInfo.IME_ACTION_DONE){
@@ -91,22 +86,14 @@ public class SearchActivity extends AppCompatActivity implements
                 Runnable searchTask = new Runnable() {
                     @Override
                     public void run() {
-                        // concatenate the artist and song names from the user
-                        // NOTE: Maybe not have it be two things. Unnecessary but might look better?
-                        String query = artistEditText.getText().toString() + " " + songEditText.getText().toString();
+                        // user input string used for searching search
+                        String query = songEditText.getText().toString();
 
                         // this synchronized lock ensures we don't display the search results until they are found
                         synchronized (lock) {
                             //calling our search function to access YouTube's api and return the search results
-                            searchResults = Search.Search(query, DeveloperKey.BROWSER_KEY);
+                            searchResults = Search.Search(query, DeveloperKey.DEVELOPER_KEY);
                             lock.notify();
-                        }
-
-                        // debug info to ensure our search was successful
-                        if(searchResults.get(0).getId().getVideoId() != null){
-                            Log.d("newSongID: ", "new song id is " + searchResults.get(0).getId().getVideoId());
-                        } else {
-                            Log.d("newSongID: ", "couldn't get new song id");
                         }
                     }
                 };
@@ -121,14 +108,24 @@ public class SearchActivity extends AppCompatActivity implements
                         // have the object wait until it is notified
                         lock.wait();
 
-                        // play the first video that is returned in the searchResults
-                        player.loadVideo(searchResults.get(0).getId().getVideoId());
-                        playingVideoIndex = 0;  // set our play video index to the first video
-                        if(searchResults != null) { // if there are results to return
+                        // debug info to ensure our search was successful
+                        if(searchResults == null){
+                            Log.d("newSongID: ", "SearchResults never initialized");
+                        }
+                        else if(searchResults.isEmpty()){
+                            Log.d("newSongID: ", "No search results found");
+                        }
+                        else {
+                            Log.d("newSongID: ", "new song id is " + searchResults.get(0).getId().getVideoId());
+
+                            // play the first video that is returned in the searchResults
+                            player.loadVideo(searchResults.get(0).getId().getVideoId());
+                            playingVideoIndex = 0;  // set our play video index to the first video
                             resultTitles.clear();  // first clear the result Titles
+
                             // for each searchResult, set it in the result Titles
                             for (SearchResult searchResult : searchResults) {
-                                resultTitles.add(searchResult.getSnippet().getTitle());
+                            resultTitles.add(searchResult.getSnippet().getTitle());
                             }
                             // create a String adapter and fill it with the searchResults
                             searchListView.setAdapter(new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_1, android.R.id.text1, resultTitles));

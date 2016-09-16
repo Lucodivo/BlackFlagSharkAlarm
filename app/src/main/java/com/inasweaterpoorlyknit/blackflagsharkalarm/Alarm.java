@@ -1,6 +1,5 @@
 package com.inasweaterpoorlyknit.blackflagsharkalarm;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
@@ -11,12 +10,6 @@ import android.view.WindowManager;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
-
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class Alarm extends AppCompatActivity implements
         YouTubePlayer.OnInitializedListener{
@@ -35,7 +28,7 @@ public class Alarm extends AppCompatActivity implements
                 +WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         playerFragment = (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.alarm_player_fragment);
-        playerFragment.initialize(DeveloperKey.ANDROID_KEY, this);
+        playerFragment.initialize(DeveloperKey.DEVELOPER_KEY, this);
     }
 
     @Override
